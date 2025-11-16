@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diligencia tus datos</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #ffffff;
+        padding: 20px;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .logo {
+        width: 200px;
+        margin: 30px auto;
+        display: block;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-step {
+        display: none;
+    }
+
+    .form-step.active {
+        display: block;
+    }
+
+    label {
+        margin-top: 10px;
+        display: block;
+        font-weight: bold;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #5e5e5e;
+        border-radius: 6px;
+    }
+
+    button {
+        background: #790000;
+        color: rgb(255, 255, 255);
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        margin-top: 20px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 15px;
+    }
+
+    button:hover {
+        background: #850101;
+    }
+
+    /* POPUP */
+    /* ---- COMPORTAMIENTO POR DEFECTO (PC) ---- */
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        white-space: nowrap; /* evita saltos de línea en computadora */
+    }
+
+    .checkbox-container label {
+        white-space: nowrap; /* evita saltos en PC */
+    }
+
+    .checkbox-container a {
+        margin-left: 5px;
+        color: #2563eb;
+        text-decoration: underline;
+        white-space: nowrap; /* evita saltos en PC */
+    }
+
+    /* ---- COMPORTAMIENTO SOLO PARA TELÉFONOS ---- */
+    @media (max-width: 480px) {
+        .checkbox-container {
+            flex-wrap: wrap;         /* permite que el contenido baje */
+            white-space: normal;     /* permite saltos en móvil */
+            align-items: flex-start;
+        }
+
+        .checkbox-container label {
+            white-space: normal;     /* solo móvil permite saltos */
+        }
+
+        .checkbox-container a {
+            white-space: normal;     /* solo móvil permite saltos */
+        }
+    }
+
+
+    /* Fondo oscuro del popup */
+    #popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(2px);
+        z-index: 9999;
+    }
+
+    /* Contenedor del contenido con scroll interno */
+    #popup .popup-content {
+        background: white;
+        width: 90%;
+        max-width: 600px;
+        max-height: 80vh;   /* <<< Evita que sea gigante */
+        margin: 5% auto;
+        padding: 25px;
+        border-radius: 12px;
+
+        overflow-y: auto;   /* <<< Scroll vertical */
+        overflow-x: hidden; /* <<< Evita scroll horizontal */
+        box-shadow: 0 4px 25px rgba(0,0,0,0.2);
+
+        font-family: 'Founders Grotesk', sans-serif;
+    }
+
+    /* Botón cerrar */
+    #popup .close-btn {
+        display: block;
+        text-align: center;
+        font-size: 15px;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+</style>
+
+</head>
+<body>
+
+<!-- LOGO -->
+<img src="logo.png" class="logo">
+
+<h2>Diligencia tus datos</h2>
+
+<!-- PASO 1 -->
+<div id="step1" class="form-step active">
+
+    <label>Nombre completo</label>
+    <input type="text" id="nombre" required>
+
+    <label>Tipo de documento</label>
+    <select id="tipo_documento" required>
+        <option value="">Seleccione...</option>
+        <option value="CC">Cédula de ciudadanía</option>
+        <option value="TI">Tarjeta de identidad</option>
+        <option value="CE">Cédula de extranjería</option>
+        <option value="PA">Pasaporte</option>
+    </select>
+
+    <label>Número de documento</label>
+    <input type="number" id="numero_documento" required>
+
+    <label>Número de teléfono</label>
+    <input type="number" id="telefono" required>
+
+    <label>Correo electrónico</label>
+    <input type="email" id="correo" required>
+
+    <label>Edad</label>
+    <input type="number" id="edad" required>
+
+    <label>Ciudad</label>
+    <input type="text" id="ciudad" required>
+
+    <div class="checkbox-container">
+        <input type="checkbox" id="autorizacion">
+        <label for="autorizacion">
+            Acepto el tratamiento de datos personales 
+            <a href="#" onclick="openPopup()">Ver tratamiento de datos</a>
+        </label>
+    </div>
+
+    <button onclick="nextStep()">Siguiente</button>
+
+</div>
+
+<!-- PASO 2 -->
+<div id="step2" class="form-step">
+
+    <label>Producto comprado</label>
+    <select id="producto" required>
+        <option value="">Seleccione...</option>
+        <option value="Basica Blanca">Basica Blanca</option>
+        <option value="Basica Negra">Basica Negra</option>
+        <option value="Basica Nude">Basica Nude</option>
+        <option value="Diseño Blanca">Diseño Blanca</option>
+        <option value="Diseño Negra">Diseño Negra</option>
+        <option value="Diseño Nude">Diseño Nude</option>
+        <option value="Texto Blanca">Texto Blanca</option>
+        <option value="Texto Negra">Texto Negra</option>
+        <option value="Texto Nude">Texto Nude</option>
+    </select>
+
+    <label>Cantidad</label>
+    <select id="cantidad" required>
+        <option value="">Seleccione...</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+    </select>
+
+    <label>Talla</label>
+    <select id="talla" required>
+        <option value="">Seleccione...</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+    </select>
+
+    <label>Medio de pago</label>
+    <select id="medio_pago" required>
+        <option value="">Seleccione...</option>
+        <option value="Nequi">Nequi</option>
+        <option value="PSE">PSE</option>
+        <option value="Credito">Tarjeta de crédito</option>
+    </select>
+
+    <label>Fecha</label>
+    <input type="text" id="fecha" disabled>
+
+    <label>Dirección de entrega</label>
+    <input type="text" id="direccion" required>
+
+    <label>Localidad</label>
+    <input type="text" id="localidad" required>
+
+    <label>Barrio</label>
+    <input type="text" id="barrio" required>
+
+    <label>Observaciones</label>
+    <textarea id="observaciones"></textarea>
+
+    <button onclick="submitForm()">Enviar</button>
+</div>
+
+<!-- POPUP -->
+<div id="popup">
+    <div class="popup-content">
+        <span class="close-btn" onclick="closePopup()">✕</span>
+
+        <!-- Aquí PONES todo el texto largo del tratamiento de datos -->
+        <div class="scrollable-text">
+        <h2>Tratamiento de Datos Personales</h2>
+
+            <p>
+                En cumplimiento de la Ley 1581 de 2012, el Decreto 1377 de 2013 y demás normas 
+                que regulan la protección de datos personales en Colombia, informamos que los 
+                datos suministrados a través de este formulario serán tratados conforme a nuestra 
+                Política de Tratamiento de Datos Personales.
+            </p>
+
+            <p>
+            Al aceptar esta autorización, usted expresa de manera libre, previa, voluntaria 
+            y explícita que permite a <strong>Frame</strong> realizar el 
+            tratamiento de su información personal para las siguientes finalidades:
+            </p>
+
+            <ul>
+                <li>Registrar y gestionar la información suministrada en el formulario.</li>
+                <li>Realizar análisis internos, estudios de mercado y segmentación de usuarios.</li>
+                <li>Contactarlo para fines relacionados con el proyecto o servicio solicitado.</li>
+                <li>Enviar comunicaciones informativas, comerciales o promocionales, si usted lo autoriza.</li>
+                <li>Mantener un histórico y registro interno para soporte, control y mejora de procesos.</li>
+            </ul>
+
+        <h3>Derechos del Titular</h3>
+            <p>Usted tiene derecho a:</p>
+
+            <ul>
+                <li>Conocer, actualizar y rectificar sus datos personales.</li>
+                <li>Solicitar prueba de la autorización otorgada.</li>
+                <li>Ser informado sobre el uso de sus datos.</li>
+                <li>Presentar quejas ante la Superintendencia de Industria y Comercio (SIC).</li>
+                <li>Revocar la autorización y solicitar la supresión de los datos cuando sea procedente.</li>
+            </ul>
+
+        <h3>Responsable del Tratamiento</h3>
+            <p>
+            <strong>Frame</strong><br>
+            Correo: <strong>frameclub.contacto@gmail.com</strong><br>
+            Ciudad: <strong>Bogota - Colombia</strong>
+            </p>
+
+            <p>
+            Al aceptar este aviso, usted declara que ha leído y comprendido esta información, 
+            y autoriza a <strong>Frame</strong> a tratar sus datos personales 
+            conforme a las finalidades aquí establecidas. La información será conservada bajo 
+            condiciones de seguridad y confidencialidad, y no será compartida con terceros 
+            sin su autorización previa, salvo obligación legal.
+            </p>
+
+            <button class="close-btn" onclick="closePopup()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+// --------- POPUP -----------
+function openPopup() {
+    document.getElementById("popup").style.display = "block";
+}
+
+function closePopup() {
+    document.getElementById("popup").style.display = "none";
+}
+
+
+// --------- VALIDAR PASO 1 -----------
+function nextStep() {
+    const campos = [
+        "nombre", "tipo_documento", "numero_documento",
+        "telefono", "correo", "edad", "ciudad"
+    ];
+
+    for (let c of campos) {
+        if (document.getElementById(c).value.trim() === "") {
+            alert("Por favor completa todos los campos.");
+            return;
+        }
+    }
+
+    if (!document.getElementById("autorizacion").checked) {
+        alert("Debes aceptar el tratamiento de datos.");
+        return;
+    }
+
+    document.getElementById("step1").classList.remove("active");
+    document.getElementById("step2").classList.add("active");
+
+    document.getElementById("fecha").value =
+        new Date().toLocaleDateString("es-CO");
+}
+
+// --------- ENVÍO A GOOGLE SHEETS -----------
+function submitForm() {
+
+    const camposPaso2 = [
+        "producto",
+        "cantidad",
+        "talla",
+        "medio_pago",
+        "direccion"
+    ];
+
+    for (let c of camposPaso2) {
+        const elemento = document.getElementById(c);
+        if (!elemento || elemento.value.trim() === "" || elemento.value === "Seleccione...") {
+            alert("Por favor completa todos los campos.");
+            return;
+        }
+    }
+
+    const data = {
+        nombre: document.getElementById("nombre").value,
+        tipo_documento: document.getElementById("tipo_documento").value,
+        numero_documento: document.getElementById("numero_documento").value,
+        telefono: document.getElementById("telefono").value,
+        correo: document.getElementById("correo").value,
+        edad: document.getElementById("edad").value,
+        ciudad: document.getElementById("ciudad").value,
+        producto: document.getElementById("producto").value,
+        cantidad: document.getElementById("cantidad").value,
+        talla: document.getElementById("talla").value,
+        medio_pago: document.getElementById("medio_pago").value,
+        fecha: document.getElementById("fecha").value,
+        direccion: document.getElementById("direccion").value,
+        localidad: document.getElementById("localidad").value,
+        barrio: document.getElementById("barrio").value,
+        observaciones: document.getElementById("observaciones").value
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycbwwYSmfimlukqah5bNdt3mB-nZlwckJyinkaspa_izkQz71grbtYztJ8mxK6zY5YS73Yg/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
+
+    alert("Información enviada correctamente.");
+}
+
+</script>
+
+</body>
+</html>
